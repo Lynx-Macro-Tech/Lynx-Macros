@@ -1,0 +1,78 @@
+$${
+    //  # ============================================
+    //  #  Macro: Mob Repair Auto
+    //  #  Version: 0.0.1
+    //  #  Developed by earruda
+    //  #  Lynx-Macro-Tech Project
+    //  # ============================================
+
+    //clear chat
+    clearchat;
+
+    //define variables
+    #tentativa_reparos = 0;
+
+    //verify if is activated
+    LOG(version());
+    toggle(@mob_repair_auto);
+    if(!@mob_repair_auto)
+        log("&f[&6MACRO&f] &2MOB REPAIR AUTO &c&l by earruda &f&l[&c&lOFF&f&l]")
+        stop;
+    endif;
+    stop;
+    log("&f[&6MACRO&f] &2MOB REPAIR AUTO &c&l by earruda &f&l[&a&lON&f&l]");
+    
+    //question which sword to use
+    log("&f[&6MACRO&f] &fMacro Desenvolvida para Upar &f&l ReparaÃ§Ã£o");
+    log("&f[&6MACRO&f] &fCaso for usar outra espada, usar outra macro");
+    log(" ");
+    log("&f[&6MACRO&f] &fQual Espada Deseja Usar?");
+    log(" ");
+    log("&e&l[&b&l1&e&l] &fEspada de Madeira");
+    log("&e&l[&b&l2&e&l] &fEspada de Pedra");
+    log(" ");
+    prompt(#espada,"$$?","Digite sua resposta. Digite 9 para sair.");
+
+    if(#espada == 1);
+        set(&espada,"wood_sword");
+        set(#item_repara, "Bloco de Madeira")
+    elseif(#espada == 2);
+        set(&espada,"stone_sword");
+        set(#item_repara, "Bloco de Pedra")
+    elseif(#espada == 9);
+        log("&f[&6MACRO&f] &2MOB REPAIR AUTO &c&l by earruda &f&l[&c&lOFF&f&l]")
+        unset(@mob_repair_auto);
+        stop;
+    endif;
+
+}$$
+
+$${
+    do;
+        pick("stone_sword");
+        if(%DURABILITY%<100);
+            look(,90);
+            wait(100ms);
+            key(use);
+            wait(100ms);
+            if(%DURABILITY%<100);
+                #tentativa_reparos = #tentativa_reparos + 1;
+            endif;
+        else;
+            // look(%&frente%);
+            // look(-360,355);
+            key(attack);
+            wait(110ms);
+        endif;
+        if(#tentativa_reparos >= 15);
+            LOG("Sem %#item_repara%, buscando nos baús");
+            // log("&f[&6MACRO&f] &2MOB REPAIR AUTO &c&l by earruda &f&l[&c&lOFF&f&l]");
+            // unset(@mob_repair_auto);
+            stop;
+        endif;
+        
+    loop;
+}$$
+
+
+// # -- by earruda --
