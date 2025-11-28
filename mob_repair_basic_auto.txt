@@ -1,0 +1,91 @@
+$${
+    //  # ============================================
+    //  #  Macro: Mob Repair Auto
+    //  #  Version: 1.0
+    //  #  Developed by earruda
+    //  #  Lynx-Macro-Tech Project
+    //  # ============================================
+
+    //clear chat
+    clearchat;
+
+    //define variables
+    #tentar_reparar = 15; // Tenta Reparar 15 vezes antes de parar a macro
+    #durabilidade_reparar = 40; // Quando chegar a 40 repara    
+    #espada = 0; // 1- espada de madeira ou 2 - espada de pedra
+
+    #yaw = CARDINALYAW;
+    #pitch = PITCH;
+
+    //verify if is activated
+    toggle(@mob_repair_auto);
+    if(!@mob_repair_auto);
+        log("&f[&6MACRO&f] &2MOB REPAIR BASIC AUTO &c&l by earruda &f&l[&c&lOFF&f&l]");
+        stop;
+    endif;
+    log("&f[&6MACRO&f] &2MOB REPAIR BASIC AUTO &c&l by earruda &f&l[&a&lON&f&l]");
+    echo("/g &fusando macro &2Reparação 1.0 &c&l by earruda")
+    
+    do();
+        if((#espada >= 1)&&(#espada <= 2))||(#espada==9);
+            break;
+        endif;
+        clearchat;
+        log("&f[&6MACRO&f] &fMacro Desenvolvida para Upar &f&l Reparação");
+        log("&f[&6MACRO&f] &fCaso for usar outra espada, usar outra macro");
+        log(" ");
+        log("&f[&6MACRO&f] &fQual Espada Deseja Usar?");
+        log(" ");
+        log("&e&l[&b&l1&e&l] &fEspada de Madeira");
+        log("&e&l[&b&l2&e&l] &fEspada de Pedra");
+        log(" ");
+        prompt(#espada,"$$?","Digite sua resposta. Digite 9 para sair.");
+    loop;
+
+    if(#espada == 1);
+        set(&espada,"wood_sword");
+        set(&item_repara, "Bloco de Madeira");
+    elseif(#espada == 2);
+        set(&espada,"stone_sword");
+        set(&item_repara, "Bloco de Pedra");
+    elseif(#espada == 9);
+        log("&f[&6MACRO&f] &2MOB REPAIR BASIC AUTO &c&l by earruda &f&l[&c&lOFF&f&l]");
+        unset(@mob_repair_auto);
+        stop;
+    endif;
+
+}$$
+
+$${
+    #tentativa_reparos = 0;
+
+    do;
+        pick("stone_sword");
+        if(%DURABILITY%<#durabilidade_reparar);
+            look(,90);
+            wait(100ms);
+            key(use);
+            wait(100ms);
+            if(%DURABILITY%<#durabilidade_reparar);
+                #tentativa_reparos = #tentativa_reparos + 1;
+            endif;
+        else;
+            if(#tentativa_reparos > 0);
+                #tentativa_reparos = 0;
+            endif;
+            look(%#yaw%,%#pitch%);
+            key(attack);
+            wait(110ms);
+        endif;
+        if(#tentativa_reparos >= #tentar_reparar);
+            log("&f[&6MACRO&f] &eSem %&item_repara%, parando macro");
+            log("&f[&6MACRO&f] &2MOB REPAIR BASIC AUTO &c&l by earruda &f&l[&c&lOFF&f&l]");
+            unset(@mob_repair_auto);
+            stop;
+        endif;
+        
+    loop;
+}$$
+
+
+// # -- by earruda --
